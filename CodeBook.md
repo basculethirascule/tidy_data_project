@@ -128,4 +128,4 @@ Additional vectors obtained by averaging the signals in a signal window sample. 
 - tBodyGyroMean
 - tBodyGyroJerkMean
 
-Prefix of the variable names shown above with 'Avg_' in the table 'average_activity.txt' indicates that the data represent the average of all data available for a subject and their chosen activity.
+Prefix of the variable names shown above with 'Avg_' in the table 'average_activity_subject.txt' indicates that the data represent the average of all data available for a subject and their chosen activity.
