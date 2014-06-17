@@ -80,7 +80,7 @@ activity.label/activity
 >Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAcc_XYZ, fBodyAccJerk_XYZ, fBodyGyro_XYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals). 
 
 These signals were used to estimate variables of the feature vector for each pattern:  
-'-XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
+'_XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
 
 - tBodyAcc_XYZ
 - tGravityAcc_XYZ
