@@ -48,4 +48,4 @@ NB: The following information is replicated in 'CodeBook.md'.
 * The column names in 'agg_data' are named appropriately,  'Avg_' is added as a prefix to column headers to indicate the data transformation that has been performed.
 
 
-The .txt output files from the script can be imported into R using write.table('filename.txt', header=T, sep='\t').
+The .txt output files from the script can be imported into R using read.table('filename.txt', header=T, sep='\t').
