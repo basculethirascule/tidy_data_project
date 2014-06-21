@@ -42,12 +42,19 @@ data$activity <- sub('5', activity.labels[,2][5], data$activity)
 data$activity <- sub('6', activity.labels[,2][6], data$activity)
 
 #remove -(), characters from column headers to avoid any potential computational problems associated with headers
-colnames(data) <- gsub('-', '_', colnames(data))
-colnames(data) <- gsub(',', '_', colnames(data))
-colnames(data) <- gsub('\\(', '', colnames(data)) #( is a special character
+colnames(data) <- gsub('-', '_', colnames(data)) #replace all hyphens with _ for purposes of making filtering data easier
+colnames(data) <- gsub(',', 'o', colnames(data)) #to indicate separation of numbers in column headers
+colnames(data) <- gsub('\\(', '', colnames(data)) #( is a special character so needs \\ before to indicate it as such
 colnames(data) <- gsub(')', '', colnames(data))
+colnames(data) <- gsub('\\.', '', colnames(data))
 
-write.table(data, 'tidy_data.txt', sep='\t', row.names = F)
+
+#look for duplicated column names in data
+aa <- which(duplicated(colnames(data)))
+dup.col.names <- colnames(data)[aa]
+#duplicated column names are not an issue for this assignment, but should be kept in mind for future analyses if required to make a tidy data set
+#from the data from the 'test' and 'training' data
+
 
 #####EXTRACT ONLY THE MEASUREMENTS ON THE MEAN AND STANDARD DEVIATION FOR EACH MEASUREMENT
 x <- grep('_mean', colnames(data)) #find all columns that were formerly labelled -mean()
@@ -57,15 +64,16 @@ mean.sd <- data[,c(x,y)]
 z <-grep('meanFreq', colnames(mean.sd)) #remove unwanted columns from the subset data frame
 mean.sd <- mean.sd[,-z] #data frame containing only -mean() and -std() information
 mean.sd <- mean.sd[,order(colnames(mean.sd))] #order the columns by variable name
+colnames(mean.sd) <- gsub('_', '', colnames(mean.sd))
+colnames(mean.sd) <- tolower(colnames(mean.sd))
+mean.sd <- data.frame(data[,c(562:565)], mean.sd) #add subject, activity, activity label and group to data frame
 write.table(mean.sd, 'mean_sd.txt', sep='\t', row.names = F)
 
 
 #####DATA FRAME WITH THE AVERAGE OF EACH VARIABLE FOR EACH ACTIVITY AND EACH SUBJECT
-x <- which(colnames(data) %in% colnames(mean.sd))
-new.data <- data[,x]
-wanted.data <- data.frame(subject = data$subject, activity = data$activity, new.data)
+wanted.data <- mean.sd[,-c(1,2)] #remove group and activitylabel from data frame
 #use aggregate to collapse data and produce average values for each variable based on subject and activity
 agg_data <- aggregate(wanted.data[,c(3:dim(wanted.data)[2])], by=list(wanted.data$subject, wanted.data$activity), FUN=mean)
 colnames(agg_data)[1:2] <- c('subject', 'activity') #give ID columns names
-colnames(agg_data)[3:dim(agg_data)[2]] <- paste('Avg_', colnames(agg_data)[3:dim(agg_data)[2]], sep='') #add information to variable columnns to indicate they represent averages of variables
+colnames(agg_data)[3:dim(agg_data)[2]] <- paste('avg', colnames(agg_data)[3:dim(agg_data)[2]], sep='') #add information to variable columnns to indicate they represent averages of variables
 write.table(agg_data, 'average_activity_subject.txt', sep='\t', row.names = F) #output aggregate data without row numbers in file

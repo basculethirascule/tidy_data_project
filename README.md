@@ -26,26 +26,32 @@ NB: The following information is replicated in 'CodeBook.md'.
 
 #The script used to process the data is 'course_project.R'.
 * Output files from 'course_project.R':
-    * 'tidy_data.txt': all test and training data in a single data frame. Contains data for 561 variables, plus 
-'activity' (descriptive), 'activity.label' (numeric) and subject (numeric).
-    *  'mean_sd.txt': data frame with only the measurements on the mean and standard deviation for each measurement.
+    *  'mean_sd.txt': data frame with only the measurements on the mean and standard deviation for each measurement for each subject ('subject', numeric), activity ('activity', numeric), activity label ('activitylabel', descriptive) and group ('group', test or train, descriptive). 
     *  'average_activity_subject.txt': data frame with the average for each variable within ''mean_sd.txt' for each activity for each subject.
-* The class labels and activity name (descriptive) information from 'activity_labels.txt' are assigned to a data frame ('activity.labels').
-* The feature information is assigned to a data frame ('features').
-* To a data frame ('test.x' or 'train.x') containing the variable information for the test or training set are added three new columns:
-    * the activity labels and subject information, under the column headings 'activity.label' and 'subject'.
-    * a column ('group') that gives set-specific information about which group the data originated from ('test' or 'train'). While not necessary for the current project, future projects may require the data to be split based on whether they came from the training or test set.
- * rbind is used to combine 'test.x' and 'train.x' to create the data frame 'data'.
- * An extra column ('activity') is added to 'data' that provides descriptive names for each activity for each subject.
- * The column names, taken from  'features.txt' are edited to remove characters such us -(), (replaced with _) that may cause problems if called as part of calculations.
- * 'data' is written to the file 'tidy_data.txt'.
- * A data frame, 'mean.sd', is created that contains only information for the mean and standard deviation for each measurement. This data frame is written to the file 'mean_sd.txt'.
-     * Note: only columns containing _mean and _std were included in 'mean.sd' as it is clearly stated in 'features_info.txt':
+
+ 
+The class labels and activity name (descriptive) information from 'activity_labels.txt' are assigned to a data frame ('activity.labels').
+
+The feature information is assigned to a data frame ('features').
+
+To a data frame ('test.x' or 'train.x') containing the variable information for the test or training set are added three new columns:
+
+* The activity labels and subject information, under the column headings 'activity.label' and 'subject'.
+* a column ('group') that gives set-specific information about which group the data originated from ('test' or 'train'). While not necessary for the current project, future projects may require the data to be split based on whether they came from the training or test set.
+
+rbind is used to combine 'test.x' and 'train.x' to create the data frame 'data'.
+
+* An extra column ('activity') is added to 'data' that provides descriptive names for each activity for each subject.
+* The column names, taken from  'features.txt' are edited to remove characters such as -(),. that may cause problems if called as part of calculations.
+* Code is included to identify duplicate column names in the data frame 'data'. While not an issue for this assignment, these columns would need to be renamed if used in future analyses.
+ * A data frame, 'mean.sd', is created that contains only information for the mean and standard deviation for each measurement for each subject, activity, activity label and group. This data frame is written to the file 'mean_sd.txt'.
+     * Note: only columns containing mean and std were included in 'mean.sd' as it is clearly stated in 'features_info.txt':
          * mean(): Mean value
          * std(): Standard deviation
         * meanFreq refers to the weighted average of the frequency components to obtain a mean frequency so columns containing this in the header were not used to create 'mean.sd'.
-* 'mean.sd' is combined with 'activity' and 'subject' information from 'data' to produce the data frame 'wanted.data'. This is collapsed to produce averages for variables for each subject and each activity using aggregate() with 'subject' and 'activity' as the IDs and the rest of 'wanted.data' as the variables. The aggregated data frame is assigned to 'agg_data'.
-* The column names in 'agg_data' are named appropriately,  'Avg_' is added as a prefix to column headers to indicate the data transformation that has been performed.
-
+* 'mean.sd' is written to a tab-separated text file.
+* 'mean.sd' ('activity', 'subject', mean and sd columns) is used to create 'wanted.data', which is used to create the aggregated data frame 'agg_data'.
+* The column names in 'agg_data' are named appropriately. 'avg' is added as a prefix to column headers to indicate the data transformation that has been performed.
+* 'agg_data' is written to a tab-separated text file. It is a tidy data file.
 
 The .txt output files from the script can be imported into R using read.table('filename.txt', header=T, sep='\t').
